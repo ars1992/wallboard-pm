@@ -1,0 +1,48 @@
+<!-- src/settings/index.html -->
+<!doctype html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Wallboard Settings</title>
+  </head>
+  <body>
+    <main>
+      <h1>Wallboard Settings</h1>
+
+      <section>
+        <h2>Monitor</h2>
+        <label>
+          Modus:
+          <select id="monitorMode">
+            <option value="primary">Primary</option>
+            <option value="index">Index</option>
+            <option value="name_contains">Name enthält</option>
+          </select>
+        </label>
+        <label>
+          Wert (Index oder Name-Fragment):
+          <input id="monitorValue" placeholder="z.B. 1 oder Samsung" />
+        </label>
+
+        <div>
+          <button id="refreshMonitors">Monitore neu laden</button>
+          <pre id="monitors"></pre>
+        </div>
+      </section>
+
+      <section>
+        <h2>URLs</h2>
+        <div id="views"></div>
+      </section>
+
+      <section>
+        <button id="save">Speichern</button>
+        <button id="saveApply">Speichern & Anwenden</button>
+        <div id="status"></div>
+      </section>
+    </main>
+
+    <script type="module" src="./settings.ts"></script>
+  </body>
+</html>
