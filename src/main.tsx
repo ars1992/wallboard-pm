@@ -5,9 +5,17 @@ import App from "./App";
 import { register, isRegistered, unregister } from "@tauri-apps/plugin-global-shortcut";
 import { invoke } from "@tauri-apps/api/core";
 
-const shortcut = "CommandOrControl+Shift+W";
+const shortcutSettings = "CommandOrControl+Shift+W";
 
-await register(shortcut, (event) => {
+const shortcutMin = "CommandOrControl+Shift+S";
+
+await register(shortcutMin, (event) => {
+  if (event.state === "Pressed") {
+    invoke("toggle_minimize_views").catch(console.error);
+  }
+});
+
+await register(shortcutSettings, (event) => {
   if (event.state === "Pressed") {
     invoke("open_settings").catch(console.error);
   }

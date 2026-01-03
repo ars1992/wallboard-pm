@@ -4,7 +4,8 @@ use serde::Serialize;
 use std::sync::Mutex;
 
 pub struct AppState {
-    pub config: Mutex<app_config::AppConfig>,
+  pub config: std::sync::Mutex<app_config::AppConfig>,
+  pub views_minimized: std::sync::Mutex<bool>,
 }
 
 #[derive(Debug, Clone, Serialize)]
