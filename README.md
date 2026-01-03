@@ -1,4 +1,4 @@
-````markdown
+
 # wallboard-pm
 
 Tauri-basierte Desktop-App, die **vier Webseiten gleichzeitig** in einem **2×2 Grid** anzeigt – umgesetzt als **vier borderlose WebView-Fenster** (statt iframes).
@@ -259,7 +259,7 @@ src/
 
 Bitte GitHub Issues verwenden.
 
-### 🐞 Bug Report
+### Bug Report
 
 Enthalten:
 
@@ -278,7 +278,7 @@ bug: apply_config does not update view 2 url
 
 ---
 
-### ✨ Feature Request
+### Feature Request
 
 Enthalten:
 
@@ -329,6 +329,3 @@ feat: autostart on windows
 ## Lizenz
 
 MIT
-
-```
-```
