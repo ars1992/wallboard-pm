@@ -2,7 +2,7 @@ import React from "react";
 import ReactDOM from "react-dom/client";
 import App from "./App";
 
-import { register, isRegistered, unregister } from "@tauri-apps/plugin-global-shortcut";
+import { register } from "@tauri-apps/plugin-global-shortcut";
 import { invoke } from "@tauri-apps/api/core";
 
 const shortcutSettings = "CommandOrControl+Shift+W";
