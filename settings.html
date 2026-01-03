@@ -1,0 +1,69 @@
+<!-- settings.html (im Projektroot, neben index.html) -->
+<!doctype html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Wallboard Settings</title>
+  </head>
+  <body>
+    <div class="page">
+      <header class="header">
+        <div>
+          <h1 class="h1">Wallboard Settings</h1>
+          <p class="subtitle">Cmd/Ctrl + Shift + S öffnet dieses Fenster</p>
+        </div>
+      </header>
+
+      <div class="grid">
+        <section class="card">
+          <div class="cardHeader">
+            <h2 class="cardTitle">URLs (4 Views)</h2>
+          </div>
+          <div class="cardBody">
+            <div id="views" class="views"></div>
+
+            <div class="actions" style="margin-top: 14px;">
+              <button id="save" class="btn">Speichern</button>
+              <button id="saveApply" class="btn btnPrimary">Speichern & Anwenden</button>
+            </div>
+
+            <div id="status" class="status"></div>
+          </div>
+        </section>
+
+        <section class="card">
+          <div class="cardHeader">
+            <h2 class="cardTitle">Monitor</h2>
+            <button id="refreshMonitors" class="btn">Monitore neu laden</button>
+          </div>
+          <div class="cardBody">
+            <div class="formRow">
+              <div class="label">Modus</div>
+              <select id="monitorMode" class="select">
+                <option value="primary">Primary</option>
+                <option value="index">Index</option>
+                <option value="name_contains">Name enthält</option>
+              </select>
+            </div>
+
+            <div class="formRow">
+              <div class="label">Wert</div>
+              <input id="monitorValue" class="input" placeholder="z.B. 1 oder Samsung" />
+            </div>
+
+            <div class="help">
+              Tipp: Bei “Name enthält” reicht ein Fragment wie <code>Samsung</code>.
+            </div>
+
+            <div style="margin-top: 12px;">
+              <pre id="monitors" class="monitors"></pre>
+            </div>
+          </div>
+        </section>
+      </div>
+    </div>
+
+    <script type="module" src="/src/settings/settings.ts"></script>
+  </body>
+</html>

@@ -1,4 +1,6 @@
 // src/settings/settings.ts
+import "./settings.css";
+
 import { invoke } from "@tauri-apps/api/core";
 import type { AppConfig, MonitorInfo } from "./types";
 
@@ -12,22 +14,51 @@ async function loadMonitors(): Promise<MonitorInfo[]> {
   return await invoke<MonitorInfo[]>("list_monitors");
 }
 
+function setStatus(msg: string, type: "ok" | "err" | "muted" = "muted") {
+  const el = $("status");
+  el.textContent = msg;
+  el.className = "status " + (type === "ok" ? "statusOk" : type === "err" ? "statusErr" : "");
+}
+
 function renderViews(cfg: AppConfig) {
   const host = $("views");
   host.innerHTML = "";
 
   cfg.views.forEach((v, idx) => {
-    const row = document.createElement("div");
-    row.innerHTML = `
-      <label>View ${idx + 1} (${v.id}) URL:
-        <input data-view="${idx}" value="${v.url}" style="width: 520px" />
-      </label>
-      <label>Profil:
-        <input data-profile="${idx}" value="${v.profile ?? ""}" placeholder="z.B. view1" />
-      </label>
+    const card = document.createElement("div");
+    card.className = "viewCard";
+
+    card.innerHTML = `
+      <div class="viewTop">
+        <div class="viewName">View ${idx + 1}</div>
+        <div class="viewId">${v.id}</div>
+      </div>
+
+      <div class="viewGrid">
+        <div>
+          <div class="label">URL</div>
+          <input class="input" data-view="${idx}" value="${escapeHtml(v.url)}" placeholder="https://..." />
+        </div>
+
+        <div>
+          <div class="label">Profil</div>
+          <input class="input" data-profile="${idx}" value="${escapeHtml(v.profile ?? "")}" placeholder="view${idx + 1}" />
+        </div>
+      </div>
     `;
-    host.appendChild(row);
+
+    host.appendChild(card);
   });
+}
+
+// simple escaping because we inject into innerHTML
+function escapeHtml(s: string) {
+  return s
+    .replaceAll("&", "&amp;")
+    .replaceAll("<", "&lt;")
+    .replaceAll(">", "&gt;")
+    .replaceAll('"', "&quot;")
+    .replaceAll("'", "&#039;");
 }
 
 function readConfigFromUI(cfg: AppConfig): AppConfig {
@@ -39,8 +70,8 @@ function readConfigFromUI(cfg: AppConfig): AppConfig {
 
   const views = cfg.views.map((v, i) => ({
     ...v,
-    url: urls[i].value.trim(),
-    profile: profiles[i].value.trim() || null,
+    url: (urls[i]?.value ?? "").trim(),
+    profile: (profiles[i]?.value ?? "").trim() || null,
   })) as AppConfig["views"];
 
   return {
@@ -48,10 +79,6 @@ function readConfigFromUI(cfg: AppConfig): AppConfig {
     monitor: { mode, value: value || null },
     views,
   };
-}
-
-function setStatus(msg: string) {
-  $("status").textContent = msg;
 }
 
 (async () => {
@@ -68,19 +95,30 @@ function setStatus(msg: string) {
       .join("\n");
   }
 
-  $("refreshMonitors").addEventListener("click", refreshMonitors);
+  $("refreshMonitors").addEventListener("click", () => {
+    refreshMonitors().catch(err => setStatus(String(err), "err"));
+  });
+
   await refreshMonitors();
 
   $("save").addEventListener("click", async () => {
-    cfg = readConfigFromUI(cfg);
-    await invoke("save_config", { newCfg: cfg });
-    setStatus("Gespeichert.");
+    try {
+      cfg = readConfigFromUI(cfg);
+      await invoke("save_config", { newCfg: cfg });
+      setStatus("Gespeichert.", "ok");
+    } catch (e: any) {
+      setStatus(e?.message ?? String(e), "err");
+    }
   });
 
   $("saveApply").addEventListener("click", async () => {
-    cfg = readConfigFromUI(cfg);
-    await invoke("save_config", { newCfg: cfg });
-    await invoke("apply_config");
-    setStatus("Gespeichert & angewendet.");
+    try {
+      cfg = readConfigFromUI(cfg);
+      await invoke("save_config", { newCfg: cfg });
+      await invoke("apply_config");
+      setStatus("Gespeichert & angewendet.", "ok");
+    } catch (e: any) {
+      setStatus(e?.message ?? String(e), "err");
+    }
   });
 })();
