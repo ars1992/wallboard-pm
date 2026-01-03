@@ -6,9 +6,21 @@
     <meta name="viewport" content="width=device-width,initial-scale=1" />
     <title>Wallboard Settings</title>
   </head>
-  <body>
+
+  <!-- Default: advanced aus -->
+  <body data-advanced="0">
     <main>
-      <h1>Wallboard Settings</h1>
+      <div style="display:flex; justify-content:space-between; gap:12px; align-items:center;">
+        <h1>Wallboard Settings</h1>
+
+        <label class="advancedToggle" title="Erweiterte Einstellungen anzeigen">
+          <input id="advancedToggle" type="checkbox" />
+          <span class="advancedPill">
+            <span class="dot"></span>
+            Advanced
+          </span>
+        </label>
+      </div>
 
       <section>
         <h2>Monitor</h2>
@@ -34,6 +46,12 @@
       <section>
         <h2>URLs</h2>
         <div id="views"></div>
+
+        <!-- Advanced Hint -->
+        <p class="advancedOnly hint">
+          Hinweis: <b>Profil</b> steuert die persistente Session (Cookies/Storage).
+          Profilwechsel kann einen Neustart/Neuaufbau der View erfordern.
+        </p>
       </section>
 
       <section>

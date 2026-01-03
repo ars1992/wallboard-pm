@@ -17,6 +17,13 @@ pub struct MonitorInfo {
 }
 
 #[tauri::command]
+pub fn apply_config(app: tauri::AppHandle, state: tauri::State<AppState>) -> Result<(), String> {
+  let cfg = state.config.lock().unwrap().clone();
+  // statt recreate (close/rebuild) -> idempotentes apply
+  window_manager::apply_wallboard(app, cfg).map_err(|e| e.to_string())
+}
+
+#[tauri::command]
 pub fn get_config(state: tauri::State<AppState>) -> app_config::AppConfig {
     state.config.lock().unwrap().clone()
 }
@@ -84,8 +91,4 @@ pub fn save_config(
     Ok(())
 }
 
-#[tauri::command]
-pub fn apply_config(app: tauri::AppHandle, state: tauri::State<AppState>) -> Result<(), String> {
-    let cfg = state.config.lock().unwrap().clone();
-    window_manager::recreate_wallboard_windows(app, cfg).map_err(|e| e.to_string())
-}
+
